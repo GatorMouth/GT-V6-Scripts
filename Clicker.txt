@@ -1,0 +1,31 @@
+local btn = GameObject.findGameObject("Clicker")
+local display = GameObject.findGameObject("ScoreDisplay")
+
+-- Grab saved data, or start from 0 if it's a new player. :)
+local data = dataLoad()
+local score = 0
+
+-- Check if data exists before trying to read the score
+if data and data.score then
+    score = data.score
+end
+
+local function refreshUI()
+    if display then
+        display:setText("Score: " .. score)
+    end
+end
+
+refreshUI()
+
+if btn then
+    btn:onTouched(function()
+        score = score + 1
+        
+        -- Save right after the click so progress isnt lost
+        dataSave({ score = score })
+        refreshUI()
+        
+        print("New Score: " .. score)
+    end)
+end
